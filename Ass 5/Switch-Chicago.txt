@@ -1,0 +1,124 @@
+Chicago switch L1,L2 and L3 
+L3: Layer three switch vtp server 
+L2 and L1 : vtp client 
+
+first set VTP server(L3) and client(L2 and L1) and then trunking for vlan 200 and 201 on appropriate ports 
+
+L2Switch-Chicago# conf t 
+Enter configuration commands, one per line.  End with CNTL/Z.
+L2Switch-Chicago(config)#vtp mode client 
+Setting device to VTP CLIENT mode.
+L2Switch-Chicago(config)#vtp domain INETLAB
+Changing VTP domain name from NULL to INETLAB
+L2Switch-Chicago(config)#
+
+L2Switch-Chicago(config)#do show vtp status
+VTP Version                     : 2
+Configuration Revision          : 0
+Maximum VLANs supported locally : 255
+Number of existing VLANs        : 7
+VTP Operating Mode              : Client
+VTP Domain Name                 : INETLAB
+VTP Pruning Mode                : Disabled
+VTP V2 Mode                     : Disabled
+VTP Traps Generation            : Disabled
+MD5 digest                      : 0xCE 0x9C 0x10 0xE3 0x1D 0x89 0x89 0x6C 
+Configuration last modified by 0.0.0.0 at 3-1-93 00:07:41
+
+
+L2Switch-Chicago(config)#int fa0/23
+L2Switch-Chicago(config-if)#switchport mode trunk 
+
+L2Switch-Chicago(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/23, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/23, changed state to up
+
+L2Switch-Chicago(config-if)#switchport trunk allowed vlan 200-201
+L2Switch-Chicago(config-if)#
+L2Switch-Chicago(config-if)#int fa 0/22
+L2Switch-Chicago(config-if)#switchport mode trunk 
+
+L2Switch-Chicago(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/22, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/22, changed state to up
+
+L2Switch-Chicago(config-if)#switchport trunk allowed vlan 200-201
+L2Switch-Chicago(config-if)#
+
+
+L1-Chicago : Configure vlan trunks on port fa0/21 and fa0/23 to vlan 200 and 201
+
+L1Switch-Chicago#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+L1Switch-Chicago(config)#int fa0/23
+L1Switch-Chicago(config-if)#switchport mode trunk
+L1Switch-Chicago(config-if)#switchport trunk allowed vlan 200-201
+L1Switch-Chicago(config-if)#int fa 0/21
+L1Switch-Chicago(config-if)#switchport mode trunk
+
+L1Switch-Chicago(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/21, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/21, changed state to up
+
+L1Switch-Chicago(config-if)#switchport trunk allowed vlan 200-201
+L1Switch-Chicago(config-if)#
+
+
+
+
+
+
+
+L3 Chicago 
+
+
+L3Switch-Chicago(config-if)#int fa0/22
+L3Switch-Chicago(config-if)#switchport mode trunk 
+
+L3Switch-Chicago(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/22, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/22, changed state to up
+
+	
+L3Switch-Chicago(config-if)#switchport trunk allowed vlan 200-201
+L3Switch-Chicago(config-if)#no shut
+
+
+
+
+
+L3Switch-Chicago(config-if)#int fa0/21
+L3Switch-Chicago(config-if)#switchport mode access 
+L3Switch-Chicago(config-if)#switchport access vlan 200
+L3Switch-Chicago(config-if)#no shut
+
+L3Switch-Chicago(config-if)#int fa0/22
+L3Switch-Chicago(config-if)#switchport mode access 
+L3Switch-Chicago(config-if)#switchport acc
+L3Switch-Chicago(config-if)#switchport access vlan 201
+L3Switch-Chicago(config-if)#no shut
+
+Setting default gate to vlans 200 and 201 
+
+L3Switch-Chicago(config)#int vlan 200
+L3Switch-Chicago(config-if)#
+%LINK-5-CHANGED: Interface Vlan200, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan200, changed state to up
+
+L3Switch-Chicago(config-if)#ip address 192.168.200.90 255.255.255.0
+L3Switch-Chicago(config-if)#int vlan 201
+L3Switch-Chicago(config-if)#
+%LINK-5-CHANGED: Interface Vlan201, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan201, changed state to up
+
+L3Switch-Chicago(config-if)#ip address 192.168.201.90 255.255.255.0
+L3Switch-Chicago(config-if)#
+
+
+

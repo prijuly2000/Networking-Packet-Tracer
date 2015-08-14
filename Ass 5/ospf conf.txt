@@ -1,0 +1,52 @@
+Area 0 OSPF configuaration 
+Router Chicago and New York 
+
+L3Switch-Chicago(config)#interface FastEthernet0/1
+L3Switch-Chicago(config-if)#no switchport
+
+port mode layer 2 to layer 3 to assign ip address to that port 
+
+L3Switch-Chicago(config-if)#ip address 192.168.2.10 255.255.255.0
+
+exit
+
+Chicago(config)#router ospf
+Chicago(config)#router ospf 1 
+
+Chicago(config-router)#network 192.168.2.0 0.0.0.255 area 0
+Chicago(config-router)#network 192.168.0.4 0.0.0.3 area 0  (se0/0/1 = 192.168.0.6/30 give the network address of this ip which is 0.4)
+
+Chicago(config-router)#network 192.168.0.9 0.0.0.0 area 0
+Loop back address = 192.168.0.9
+0.0.0.0 = to check compelte match 
+
+
+NewYork#conf t 
+Enter configuration commands, one per line.  End with CNTL/Z.
+NewYork(config)#router ospf 1
+NewYork(config-router)#network 192.168.0.4 0.0.0.3 area 0
+NewYork(config-router)#
+
+
+ L3 Chicago 
+Add ospf configuration 
+//L3Switch-Chicago(config)#ip default-gateway 192.168.2.1
+L3Switch-Chicago(config)#router ospf 1
+L3Switch-Chicago(config-router)#network 192.168.2.0
+% Incomplete command.
+L3Switch-Chicago(config-router)#network 192.168.2.0 0.0.0.255 area 0
+L3Switch-Chicago(config-router)#network 192.168.2.0 0.0.0.255 area 0
+01:19:03: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.2.1 on FastEthernet0/1fff
+
+                                ^
+% Invalid input detected at '^' marker.
+	
+L3Switch-Chicago(config-router)#network 192.168.200.0 0.0.0.255 area 0
+L3Switch-Chicago(config-router)#network 192.168.201.0 0.0.0.255 area 0
+
+
+
+
+
+
+
